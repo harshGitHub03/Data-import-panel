@@ -4,10 +4,14 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import { AuthRequest } from '../middleware/auth';
 
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  sameSite: 'lax' as const,
-  secure: process.env.NODE_ENV === 'production',
+  // so the cookie must be SameSite=None to be sent on cross-site requests.
+  // SameSite=None requires Secure, which only works over HTTPS (fine in prod, not on local http).
+  sameSite: IS_PRODUCTION ? ('none' as const) : ('lax' as const),
+  secure: IS_PRODUCTION,
   maxAge: 24 * 60 * 60 * 1000,
 };
 

@@ -7,6 +7,7 @@ import usersRoutes from './routes/users.routes';
 import { requireAuth } from './middleware/auth';
 
 const app = express();
+app.set('trust proxy', 1);
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', process.env.CORS_ORIGIN || '*');
